@@ -18,6 +18,8 @@
 ### Session Notes & Troubleshooting
 8. **[SESSION_SUMMARY.md](SESSION_SUMMARY.md)** - Session 1 debugging notes
 9. **[SESSION_SUMMARY_2.md](SESSION_SUMMARY_2.md)** - Session 2 debugging notes
+10. **[SCRIPT_IMPROVEMENTS.md](SCRIPT_IMPROVEMENTS.md)** - roscore management fixes
+11. **[DOCUMENTATION_UPDATE_SUMMARY.md](DOCUMENTATION_UPDATE_SUMMARY.md)** - Network verification documentation
 
 ---
 

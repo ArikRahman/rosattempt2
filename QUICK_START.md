@@ -57,22 +57,34 @@ This script:
 - Node seems stuck or unresponsive
 - After Ctrl+C doesn't fully stop processes
 
-### Option 1: Easiest Way (Using Helper Script)
+### Running the Radar (Recommended Method)
+
+The `run_radar.sh` script now handles everything automatically:
+- ✅ Checks for duplicate instances
+- ✅ Starts roscore automatically if needed
+- ✅ Keeps roscore alive in background
+- ✅ Runs radar node in foreground
+- ✅ Graceful shutdown on Ctrl+C
 
 ```bash
 cd /home/arik/rosattempt2
 ./cleanup_radar.sh  # Clean state first
-./run_radar.sh
+./run_radar.sh      # Starts both roscore and radar
 ```
 
-### Option 2: Step-by-Step
+**To stop**: Press `Ctrl+C`  
+**Note**: roscore remains running after Ctrl+C for faster restarts. Use `./cleanup_radar.sh` to stop everything.
+
+### Alternative: Manual Step-by-Step
+
+Only use this if you need fine-grained control:
 
 ```bash
 # Step 0: Clean state
 cd /home/arik/rosattempt2
 ./cleanup_radar.sh
 
-# Terminal 1: Start ROS master
+# Terminal 1: Start ROS master (manual method)
 cd /home/arik/rosattempt2
 nix develop
 source ws/devel/setup.bash
