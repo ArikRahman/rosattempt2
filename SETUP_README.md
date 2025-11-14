@@ -260,3 +260,10 @@ nix develop
 source ws/devel/setup.bash
 roscore &
 rosrun mmWave no_Qt.py --cmd_tty /dev/ttyACM0 14xx/indoor_human_rcs
+
+Hardware requirements before running:
+
+TI mmWave radar board connected via USB
+DCA1000EVM connected via Ethernet
+Network configured: sudo ip addr add 192.168.33.30/24 dev <interface>
+Serial permissions: Add user to dialout group
