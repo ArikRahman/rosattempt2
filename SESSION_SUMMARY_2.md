@@ -270,27 +270,49 @@ python3 test_sensor_start.py
 
 ---
 
-## Questions Still Unanswered
+## ROOT CAUSE IDENTIFIED! 🎯
+
+**The radar does NOT have the LVDS streaming firmware flashed!**
+
+### Evidence:
+1. Created `check_radar_firmware.py` to test serial communication
+2. Radar responds to serial commands but only echoes them
+3. No "Done" responses from radar
+4. Commands like `sensorStart` are not executed, just echoed back
+5. Radar is running factory/default firmware, not LVDS streaming firmware
+
+### Explanation:
+- In **Development Mode** (SOP0=1, SOP1=1): mmWave Studio can load firmware to RAM temporarily
+- In **Functional Mode** (SOP0=0, SOP1=0): Radar boots from flash memory
+- When user used mmWave Studio, firmware was loaded to RAM but NOT flashed to persistent storage
+- Now in Functional Mode, radar boots factory firmware which doesn't support LVDS streaming
+
+### Solution:
+**Flash the LVDS streaming firmware to the radar's flash memory**
+
+Firmware location: `/home/arik/rosattempt2/iwr_raw_rosnode/firmware/xwr14xx_lvds_stream.bin`
+
+Detailed instructions: `FIRMWARE_FLASHING_GUIDE.md`
+
+### Why No Command-Line Flashing:
+- TI mmWave radars require proprietary tools (UniFlash, CCS, mmWave Studio)
+- No open-source command-line flashers available
+- USB connection uses XDS110 debug protocol, not standard serial
+- User needs to install TI UniFlash (free) or use existing mmWave Studio
+
+## Questions ANSWERED
 
 1. **Why is no data received on port 4098?**
-   - Is DCA1000 receiving LVDS data from radar?
-   - Is DCA1000 FPGA configured to forward data?
-   - Is the RECORD_START command actually arming the DCA?
+   - ✅ **ANSWER**: Radar doesn't have LVDS streaming firmware - it can't transmit LVDS data!
 
 2. **Is the sensor actually starting?**
-   - Does sensorStart command succeed?
-   - Is radar properly configured first?
-   - What does radar serial output show?
+   - ✅ **ANSWER**: No! Factory firmware doesn't understand sensorStart/sensorStop commands
 
-3. **Is there a timing issue?**
-   - Should we wait longer between arm_dca() and toggle_capture()?
-   - Does DCA need time to initialize after RECORD_START?
-   - Is there a race condition?
+3. **Why did it work with mmWave Studio?**
+   - ✅ **ANSWER**: mmWave Studio loads firmware to RAM in Development Mode, but doesn't flash to persistent storage
 
-4. **What's the expected DCA1000 behavior?**
-   - What LEDs should be on/blinking?
-   - Does it need to be reconfigured after each stop?
-   - How to verify FPGA is in correct state?
+4. **What about SOP jumper settings?**
+   - ✅ **ANSWER**: Need Development Mode (SOP0=1, SOP1=1) for flashing, then Functional Mode (SOP0=0, SOP1=0) for normal operation
 
 ---
 

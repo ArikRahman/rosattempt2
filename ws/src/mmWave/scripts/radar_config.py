@@ -113,7 +113,7 @@ def dict_to_list(cfg):
     cfg_list.append('frameCfg %s %s %s %s %s 1 0'
             % (chirpStart, chirpStop, int(numLoops), numFrames, 1000/cfg['fps']))
 
-    cfg_list.append('testFmkCfg 0 0 0 1')
+    cfg_list.append('testFmkCfg 0 0 1 1')
     cfg_list.append('setProfileCfg disable ADC disable')
     return cfg_list
 

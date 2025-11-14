@@ -15,9 +15,16 @@
    # Configure network (replace eth0 with your interface)
    sudo ip addr add 192.168.33.30/24 dev eth0
    
-   # Verify connection to DCA1000EVM
-   ping 192.168.33.180
+   # ⚠️ IMPORTANT: DCA1000 does NOT respond to ping!
+   # Verify connection using ARP table instead:
+   ip neigh show | grep 192.168.33.180
+   # Should show: 192.168.33.180 dev eth0 lladdr ... REACHABLE
+   
+   # OR test UDP communication (more reliable):
+   timeout 5 python3 configure_dca1000_simple.py
    ```
+   
+   **See [NETWORK_VERIFICATION.md](NETWORK_VERIFICATION.md) for details on why ping doesn't work!**
 
 3. **Serial Port Permissions:**
    ```bash

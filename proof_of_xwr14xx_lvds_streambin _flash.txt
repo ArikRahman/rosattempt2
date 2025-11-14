@@ -1,0 +1,13 @@
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: Checking file C:/Users/corba/Downloads/xwr14xx lvds stream.bin for correct header for IWR1443.
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: IWR1443 device, fileType=META IMAGE1 detected -> OK
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: !! Files are valid for IWR1443.
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: Format on download was specified. Formatting SFLASH storage…
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: -->Erasing storage [SFLASH]
+[11/14/2025, 11:16:16 AM] [INFO] Cortex R4 0: -->Sending Erase command to device.
+[11/14/2025, 11:16:29 AM] [SUCCESS] Cortex R4 0: -->Erase storage completed successfully!
+[11/14/2025, 11:16:29 AM] [INFO] Cortex R4 0: Downloading [META IMAGE1] size [127556]
+[11/14/2025, 11:16:45 AM] [INFO] Cortex R4 0: SUCCESS!! File type META IMAGE1 downloaded successfully to SFLASH.
+[11/14/2025, 11:16:45 AM] [INFO] Cortex R4 0: Disconnecting from device on port COM14…
+[11/14/2025, 11:16:45 AM] [INFO] Cortex R4 0: Flashing instance clean-up initiated…
+[11/14/2025, 11:16:45 AM] [INFO] Cortex R4 0: Instance deinitialized!
+[11/14/2025, 11:16:45 AM] [SUCCESS] Program Load completed successfully.
