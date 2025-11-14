@@ -1,0 +1,1 @@
+/nix/store/gv6bdp4sk318jhvyfxng4icxfn10s76c-gcc-wrapper-14.3.0/bin/gcc -fPIC -Wl,--dependency-file=CMakeFiles/cbuffer.dir/link.d -shared -Wl,-soname,libcbuffer.so -o /home/arik/rosattempt2/ws/devel/lib/libcbuffer.so CMakeFiles/cbuffer.dir/scripts/circ_buff.c.o

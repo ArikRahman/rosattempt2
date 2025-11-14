@@ -1,0 +1,2 @@
+mmWave
+-DCATKIN_DEVEL_PREFIX=/home/arik/rosattempt2/ws/devel -DCMAKE_INSTALL_PREFIX=/home/arik/rosattempt2/ws/install -G Unix Makefiles
