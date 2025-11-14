@@ -30,16 +30,41 @@
 
 ## Running the Radar
 
+### ⚠️ IMPORTANT: Clean State First
+
+**Always start from a clean state** to avoid port conflicts and stuck processes:
+
+```bash
+cd /home/arik/rosattempt2
+./cleanup_radar.sh
+```
+
+This script:
+- Kills any stuck ROS/radar processes
+- Frees up ports 4096, 4098, 11311
+- Verifies system is ready for fresh start
+
+**Use cleanup_radar.sh whenever:**
+- Starting a new session
+- Getting "Address already in use" errors
+- Node seems stuck or unresponsive
+- After Ctrl+C doesn't fully stop processes
+
 ### Option 1: Easiest Way (Using Helper Script)
 
 ```bash
 cd /home/arik/rosattempt2
+./cleanup_radar.sh  # Clean state first
 ./run_radar.sh
 ```
 
 ### Option 2: Step-by-Step
 
 ```bash
+# Step 0: Clean state
+cd /home/arik/rosattempt2
+./cleanup_radar.sh
+
 # Terminal 1: Start ROS master
 cd /home/arik/rosattempt2
 nix develop
@@ -84,6 +109,13 @@ rosrun mmWave fft_viz.py
    ```
 
 ## Common Issues
+
+### Processes stuck or "Address already in use"
+```bash
+# Force clean state
+./cleanup_radar.sh
+# Then try running again
+```
 
 ### "Permission denied" on /dev/ttyACM0
 ```bash

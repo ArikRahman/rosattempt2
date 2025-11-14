@@ -1,0 +1,45 @@
+Starting mmWave radar node...
+
+Usage: ./run_radar.sh [config_name] [command_tty]
+  config_name: Configuration file name without .cfg extension (default: 14xx/indoor_human_rcs)
+  command_tty: TTY device for radar commands (default: /dev/ttyACM0)
+
+Using configuration: 14xx/indoor_human_rcs
+Using command TTY: /dev/ttyACM0
+
+Checking for roscore...
+✓ roscore is running on port 11311
+
+warning: Git tree '/home/arik/rosattempt2' has uncommitted changes
+Using saved setting for 'extra-substituters = https://ros.cachix.org' from ~/.local/share/nix/trusted-settings.json.
+Using saved setting for 'extra-trusted-public-keys = ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo=' from ~/.local/share/nix/trusted-settings.json.
+ROS Noetic environment loaded (ROS_PACKAGE_PATH=/home/arik/rosattempt2/ws/src:)
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1064: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1065: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1066: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1067: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1068: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1069: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1070: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1071: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1072: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1073: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1074: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1075: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1076: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1077: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1078: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1079: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1080: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1081: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1082: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1083: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1084: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1085: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/share/rosbash/rosbash: line 1086: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/etc/catkin/profile.d/20.transform.bash: line 23: complete: command not found
+/nix/store/j9vvd6ppcwwqyp0rrb58l647l018r1gi-ros-env/etc/catkin/profile.d/20.transform.bash: line 42: complete: command not found
+/home/arik/rosattempt2/ws/src/mmWave/scripts/no_Qt.py:88: DeprecationWarning: setDaemon() is deprecated, set the daemon attribute instead
+  x.setDaemon(True)
+/home/arik/rosattempt2/ws/src/mmWave/scripts/no_Qt.py:92: DeprecationWarning: setDaemon() is deprecated, set the daemon attribute instead
+  y.setDaemon(True)

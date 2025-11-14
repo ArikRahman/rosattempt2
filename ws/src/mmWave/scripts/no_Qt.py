@@ -34,10 +34,20 @@ def collect_data_thread_func(mmwave_sensor):
 def check_and_publish_thread_func(mmwave,pub):
     """This function will check if any frames have been completed and subsequently put into a queue. This function
     will publish the contents of the queue."""
+    import time as time_module
+    last_print = 0
+    total_published = 0
     while True:
         if mmwave.capture_started:
-            if mmwave.data_array.queue.qsize() > 0:
+            qsize = mmwave.data_array.queue.qsize()
+            if qsize > 0:
                 pub.publish(mmwave.data_array.queue.get())
+                total_published += 1
+            # Print debug info every 2 seconds
+            now = time_module.time()
+            if now - last_print > 2.0:
+                print(f"[DEBUG] Queue size: {qsize}, Total published: {total_published}")
+                last_print = now
 
 
 if __name__ == '__main__':
@@ -69,23 +79,30 @@ if __name__ == '__main__':
     #TODO: define message with proper fields instead of 1 big string
     pub_config.publish('\n'.join(iwr_cfg_cmd)) # entire config file as a latched topic
 
+    print("[MAIN] Converting config to dictionary...")
     iwr_cfg_dict = cfg_list_to_dict(iwr_cfg_cmd)  # store the config params into dictionary
+    print("[MAIN] Setting ROS parameters...")
     rospy.set_param('iwr_cfg', iwr_cfg_dict)  # store config dictionary in param server
+    print("[MAIN] Creating mmWave_Sensor object...")
     mmwave_sensor = mmWave_Sensor(iwr_cmd_tty=args.cmd_tty)
+    print("[MAIN] Setting up DCA and configuring IWR...")
     mmwave_sensor.setupDCA_and_cfgIWR()
 
+    print("[MAIN] Starting data collection thread...")
     x = threading.Thread(target=collect_data_thread_func, args=(mmwave_sensor,))
-    x.setDaemon(True)
+    x.daemon = True
     x.start()
 
+    print("[MAIN] Starting publish thread...")
     y = threading.Thread(target=check_and_publish_thread_func, args=(mmwave_sensor,pub_radar,))
-    y.setDaemon(True)
+    y.daemon = True
     y.start()
 
+    print("[MAIN] Arming DCA1000...")
     mmwave_sensor.arm_dca()
     time.sleep(2)
 
-
+    print("[MAIN] Starting sensor...")
     try:
         mmwave_sensor.toggle_capture(toggle=1)
         rate = rospy.Rate(.5)

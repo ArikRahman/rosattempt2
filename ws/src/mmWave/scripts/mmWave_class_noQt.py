@@ -23,11 +23,11 @@ from radar_config import dict_to_list
 class mmWave_Sensor():
     iwr_rec_cmd = ['sensorStop', 'sensorStart']
     # dca1000evm configuration commands; only the ones used are filled in
-    # TODO: hardcoded comand values should be changed
+    # NOTE: CONFIG_FPGA_GEN_CMD_CODE uses lvdsMode=2 (was 1, fixed to match reference implementation)
     dca_cmd = { \
-        'RESET_FPGA_CMD_CODE'               : b"", \
+        'RESET_FPGA_CMD_CODE'               : b"\x5a\xa5\x01\x00\x00\x00\xaa\xee", \
         'RESET_AR_DEV_CMD_CODE'             : b"", \
-        'CONFIG_FPGA_GEN_CMD_CODE'          : b"\x5a\xa5\x03\x00\x06\x00\x01\x01\x01\x02\x03\x1e\xaa\xee", \
+        'CONFIG_FPGA_GEN_CMD_CODE'          : b"\x5a\xa5\x03\x00\x06\x00\x01\x02\x01\x02\x03\x1e\xaa\xee", \
         'CONFIG_EEPROM_CMD_CODE'            : b"", \
         'RECORD_START_CMD_CODE'             : b"\x5a\xa5\x05\x00\x00\x00\xaa\xee", \
         'RECORD_STOP_CMD_CODE'              : b"\x5a\xa5\x06\x00\x00\x00\xaa\xee", \
@@ -53,20 +53,32 @@ class mmWave_Sensor():
     capture_started = 0
 
     data_file = None
+    
+    packets_received = 0  # Debug counter
+    last_packet_print = 0  # Last time we printed packet count
 
     def __init__(self, iwr_cmd_tty='/dev/ttyACM0', iwr_data_tty='/dev/ttyACM1'):
-
+        print("[INIT] Creating mmWave_Sensor object...")
+        
+        print("[INIT] Creating data socket...")
         self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.data_socket.bind(("192.168.33.30", 4098))
         self.data_socket.settimeout(25e-5)
         #self.data_socket.setblocking(True)
         self.data_socket_open = True
+        print("[INIT] Data socket created and bound to port 4098")
 
         self.seqn = 0  # this is the last packet index
         self.bytec = 0 # this is a byte counter
         self.q = Queue.Queue()
+        
+        print("[INIT] Reading config params from ROS parameter server...")
         frame_len = 2*rospy.get_param('iwr_cfg/profiles')[0]['adcSamples']*rospy.get_param('iwr_cfg/numLanes')*rospy.get_param('iwr_cfg/numChirps')
+        print(f"[INIT] Frame length: {frame_len}")
+        
+        print("[INIT] Creating ring buffer...")
         self.data_array = ring_buffer(int(2*frame_len), int(frame_len))
+        print("[INIT] mmWave_Sensor initialization complete")
 
 
         self.iwr_cmd_tty=iwr_cmd_tty
@@ -116,6 +128,11 @@ class mmWave_Sensor():
 
         # Set up DCA
         print("SET UP DCA")
+        print("Resetting FPGA...")
+        self.dca_socket.sendto(self.dca_cmd['RESET_FPGA_CMD_CODE'], self.dca_cmd_addr)
+        self.collect_response()
+        time.sleep(0.5)  # Give FPGA time to reset
+        
         self.dca_socket.sendto(self.dca_cmd['SYSTEM_CONNECT_CMD_CODE'], self.dca_cmd_addr)
         import sys
         print(sys.version)
@@ -169,6 +186,7 @@ class mmWave_Sensor():
             return
 
         sensor_cmd = self.iwr_rec_cmd[toggle]
+        print(f"[DEBUG] Sending sensor command: '{sensor_cmd}'")
         for i in range(len(sensor_cmd)):
             self.iwr_serial.write(sensor_cmd[i].encode('utf-8'))
             time.sleep(0.010)   #  10 ms delay between characters
@@ -179,6 +197,7 @@ class mmWave_Sensor():
         response = self.iwr_serial.read(size=6)
         print('LVDS Stream:/>' + sensor_cmd)
         print(response.decode('utf-8'))
+        print(f"[DEBUG] Sensor command sent, capture_started={toggle}")
 
         if sensor_cmd == 'sensorStop':
             self.dca_socket.sendto(self.dca_cmd['RECORD_STOP_CMD_CODE'], self.dca_cmd_addr)
@@ -189,9 +208,19 @@ class mmWave_Sensor():
     def collect_data(self):
         try:
             msg, server = self.data_socket.recvfrom(2048)
+            # DEBUG: We received a packet!
+            self.packet_count = getattr(self, 'packet_count', 0) + 1
+            if self.packet_count == 1:
+                print(f"[DEBUG] First packet received from {server}!")
+            elif self.packet_count % 100 == 0:
+                print(f"[DEBUG] Received {self.packet_count} packets")
 
+        except socket.timeout:
+            # Expected when no data is available - this is normal
+            return
         except Exception as e:
-            print(e)
+            # Print other exceptions for debugging
+            print(f"Data collection error: {e}")
             return
 
         #self.data_file.write(msg)  # keep to compare rosbag with binary here
