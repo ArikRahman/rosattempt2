@@ -79,28 +79,27 @@ class mmWave_Sensor():
 
     def collect_response(self):
         status = 1
-        while status:
-            try:
-                msg, server = self.dca_socket.recvfrom(2048)
-                import struct
-                (status,) = struct.unpack('<H', msg[4:6])
-
-                if status == 898:
-                    break
-            except Exception as e:
-                print(e)
-                continue
+        try:
+            msg, server = self.dca_socket.recvfrom(2048)
+            import struct
+            (status,) = struct.unpack('<H', msg[4:6])
+            if status == 0:
+                print(f"  ✓ DCA response OK")
+            else:
+                print(f"  ⚠ DCA response status: {status}")
+            return status
+        except Exception as e:
+            print(f"  ✗ DCA timeout: {e}")
+            return -1
 
     def collect_arm_response(self):
-        status = 1
-        while status:
-            try:
-                msg, server = self.dca_socket.recvfrom(2048)
-                if msg == self.dca_cmd['SYSTEM_ERROR_CMD_CODE']:
-                    break
-            except Exception as e:
-                print(e)
-                continue
+        try:
+            msg, server = self.dca_socket.recvfrom(2048)
+            print(f"  ✓ DCA armed, received: {msg.hex()}")
+            return True
+        except Exception as e:
+            print(f"  ✗ DCA arm timeout: {e}")
+            return False
 
     def setupDCA_and_cfgIWR(self):
         self.dca_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
